@@ -30,10 +30,17 @@ def transition(state, moved_missionaries, moved_cannibals, to):
         transitioned_state["number_of_cannibals"][1] += moved_cannibals
         transitioned_state["number_of_cannibals"][0] -= moved_cannibals
         return transitioned_state
+<<<<<<< HEAD
 
     transitioned_state["number_of_missionaries"][0] += moved_missionaries
     transitioned_state["number_of_missionaries"][1] -= moved_missionaries
 
+=======
+
+    transitioned_state["number_of_missionaries"][0] += moved_missionaries
+    transitioned_state["number_of_missionaries"][1] -= moved_missionaries
+
+>>>>>>> master
     transitioned_state["number_of_cannibals"][0] += moved_cannibals
     transitioned_state["number_of_cannibals"][1] -= moved_cannibals
     return transitioned_state
@@ -76,6 +83,8 @@ def random_strategy(state):
     return visited_states
 
 
+<<<<<<< HEAD
+=======
 # def bkt_strategy(state):
 #     to = state["boat"]["position"]
 #     while not is_final(state):
@@ -88,6 +97,7 @@ def random_strategy(state):
 #     return state
 #
 #
+>>>>>>> master
 # def iddfs_strategy(state):
 #     to = state["boat"]["position"]
 #     while not is_final(state):
@@ -99,6 +109,27 @@ def random_strategy(state):
 #
 #     return state
 
+<<<<<<< HEAD
+def bkt(state, visited_states, to):
+    for moved_missionaries in range(state["number_of_missionaries"][1 - to] + 1, 0, -1):
+        for moved_cannibals in range(state["number_of_cannibals"][1 - to] + 1, 0, -1):
+            if validation(state, moved_missionaries, moved_cannibals, to):
+                new_state = transition(state, moved_missionaries, moved_cannibals, to)
+                if new_state not in visited_states:
+                    visited_states.append(new_state)
+                    if is_final(new_state):
+                        for v in visited_states:
+                            print(v)
+                        exit()
+                    else:
+                        bkt(new_state, visited_states, 1 - to)
+                    visited_states.pop()
+
+
+def bkt_strategy(state):
+    bkt(state, [state], 1)
+
+=======
 # def bkt(state, k, visited_states):
 #     for i in range(0, state["number_of_missionaries"][1 - to]):
 #         for j in range(0, state["number_of_cannibals"][1 - to]):
@@ -110,6 +141,12 @@ def random_strategy(state):
 #                     visited_states[k] = state
 #                 if is_final(state):
                     
+>>>>>>> master
 
+bkt(bkt_strategy(initialize(4, 10, 9)))
 
+<<<<<<< HEAD
+# print(random_strategy(initialize(3, 5, 5)))
+=======
 print(random_strategy(initialize(3, 5, 5)))
+>>>>>>> master
