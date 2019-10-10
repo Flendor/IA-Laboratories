@@ -30,17 +30,10 @@ def transition(state, moved_missionaries, moved_cannibals, to):
         transitioned_state["number_of_cannibals"][1] += moved_cannibals
         transitioned_state["number_of_cannibals"][0] -= moved_cannibals
         return transitioned_state
-<<<<<<< HEAD
 
     transitioned_state["number_of_missionaries"][0] += moved_missionaries
     transitioned_state["number_of_missionaries"][1] -= moved_missionaries
 
-=======
-
-    transitioned_state["number_of_missionaries"][0] += moved_missionaries
-    transitioned_state["number_of_missionaries"][1] -= moved_missionaries
-
->>>>>>> master
     transitioned_state["number_of_cannibals"][0] += moved_cannibals
     transitioned_state["number_of_cannibals"][1] -= moved_cannibals
     return transitioned_state
@@ -83,21 +76,6 @@ def random_strategy(state):
     return visited_states
 
 
-<<<<<<< HEAD
-=======
-# def bkt_strategy(state):
-#     to = state["boat"]["position"]
-#     while not is_final(state):
-#         to = 1 - to
-#         # Choose bkt moved_missionaries, moved_cannibals from possible transitions
-#         new_state = transition(state, moved_missionaries, moved_cannibals, to)
-#         if validation(state, moved_missionaries, moved_cannibals):
-#             state = transition(state, moved_missionaries, moved_cannibals, to)
-#
-#     return state
-#
-#
->>>>>>> master
 # def iddfs_strategy(state):
 #     to = state["boat"]["position"]
 #     while not is_final(state):
@@ -109,7 +87,6 @@ def random_strategy(state):
 #
 #     return state
 
-<<<<<<< HEAD
 def bkt(state, visited_states, to):
     for moved_missionaries in range(state["number_of_missionaries"][1 - to] + 1, 0, -1):
         for moved_cannibals in range(state["number_of_cannibals"][1 - to] + 1, 0, -1):
@@ -129,24 +106,7 @@ def bkt(state, visited_states, to):
 def bkt_strategy(state):
     bkt(state, [state], 1)
 
-=======
-# def bkt(state, k, visited_states):
-#     for i in range(0, state["number_of_missionaries"][1 - to]):
-#         for j in range(0, state["number_of_cannibals"][1 - to]):
-#             if validation(state, i, j, to):
-#                 state = transition(state, i, j, to)
-#                 if len(visited_states) < k:
-#                     visited_states.append(state)
-#                 else:
-#                     visited_states[k] = state
-#                 if is_final(state):
-                    
->>>>>>> master
 
 bkt(bkt_strategy(initialize(4, 10, 9)))
 
-<<<<<<< HEAD
-# print(random_strategy(initialize(3, 5, 5)))
-=======
 print(random_strategy(initialize(3, 5, 5)))
->>>>>>> master
