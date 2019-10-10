@@ -107,6 +107,6 @@ def bkt_strategy(state):
     bkt(state, [state], 1)
 
 
-bkt(bkt_strategy(initialize(4, 10, 9)))
+bkt_strategy(initialize(4, 10, 9))
 
 print(random_strategy(initialize(3, 5, 5)))
