@@ -41,19 +41,11 @@ def validation(state, moved_missionaries, moved_cannibals):
             moved_missionaries >= 0 and moved_cannibals >= 0 and 0 < moved_cannibals + moved_missionaries <= state["boat"]["capacity"])
 
 
-def strategy(state, strategy_name = "random"):
-    if strategy_name not in ["random", "bkt", "iddfs"]:
-        return None
-
+def random_strategy(state):
     to = state["boat"]["position"]
     while not is_final(state):
         to = 1 - to
-        if strategy_name == "random":
-            # Choose random moved_missionaries, moved_cannibals from possible transitions
-        elif strategy_name == "bkt":
-            # Choose bkt moved_missionaries, moved_cannibals from possible transitions
-        elif strategy_name == "iddfs":
-            # Choose iddfs moved_missionaries, moved_cannibals from possible transitions
+        # Choose random moved_missionaries, moved_cannibals from possible transitions
         new_state = transition(state, moved_missionaries, moved_cannibals, to)
         if validation(new_state, moved_missionaries, moved_cannibals):
             state = new_state
@@ -61,4 +53,28 @@ def strategy(state, strategy_name = "random"):
     return state
 
 
-print(initialize(3, 5, 5))
+def bkt_strategy(state):
+    to = state["boat"]["position"]
+    while not is_final(state):
+        to = 1 - to
+        # Choose bkt moved_missionaries, moved_cannibals from possible transitions
+        new_state = transition(state, moved_missionaries, moved_cannibals, to)
+        if validation(new_state, moved_missionaries, moved_cannibals):
+            state = new_state
+
+    return state
+
+
+def iddfs_strategy(state):
+    to = state["boat"]["position"]
+    while not is_final(state):
+        to = 1 - to
+        # Choose iddfs moved_missionaries, moved_cannibals from possible transitions
+        new_state = transition(state, moved_missionaries, moved_cannibals, to)
+        if validation(new_state, moved_missionaries, moved_cannibals):
+            state = new_state
+
+    return state
+
+
+# print(initialize(3, 5, 5))
