@@ -109,8 +109,26 @@ def iddfs_strategy(state):
         print(state_from_path)
 
 
+def bkt(state, visited_states, to):
+    for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
+        for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
+            if validation(state, moved_missionaries, moved_cannibals, to):
+                new_state = transition(state, moved_missionaries, moved_cannibals, to)
+                if new_state not in visited_states:
+                    visited_states.append(new_state)
+                    if is_final(new_state):
+                        for v in visited_states:
+                            print(v)
+                        exit()
+                    else:
+                        bkt(new_state, visited_states, 1 - to)
+                    visited_states.pop()
 
-# states = random_strategy(initialize(4, 10, 9))
-# states = bkt_strategy(initialize(4, 10, 9))
-# states = iddfs_strategy(initialize(4, 10, 9))
 
+def bkt_strategy(state):
+    bkt(state, [state], 1)
+
+
+# random_strategy(initialize(4, 10, 9))
+# iddfs_strategy(initialize(4, 10, 9))
+# bkt_strategy(initialize(4, 10, 9))
