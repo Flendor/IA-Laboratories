@@ -88,8 +88,8 @@ def random_strategy(state):
 #     return state
 
 def bkt(state, visited_states, to):
-    for moved_missionaries in range(state["number_of_missionaries"][1 - to] + 1, 0, -1):
-        for moved_cannibals in range(state["number_of_cannibals"][1 - to] + 1, 0, -1):
+    for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
+        for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
             if validation(state, moved_missionaries, moved_cannibals, to):
                 new_state = transition(state, moved_missionaries, moved_cannibals, to)
                 if new_state not in visited_states:
