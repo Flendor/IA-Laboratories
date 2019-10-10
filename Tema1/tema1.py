@@ -73,19 +73,41 @@ def random_strategy(state):
             visited_states = [copy.deepcopy(state_init)]
             state = copy.deepcopy(state_init)
 
-    return visited_states
+    for visited_state in visited_states:
+        print(visited_state)
 
 
-# def iddfs_strategy(state):
-#     to = state["boat"]["position"]
-#     while not is_final(state):
-#         to = 1 - to
-#         # Choose iddfs moved_missionaries, moved_cannibals from possible transitions
-#         new_state = transition(state, moved_missionaries, moved_cannibals, to)
-#         if validation(new_state, moved_missionaries, moved_cannibals):
-#             state = new_state
-#
-#     return state
+def iddfs_strategy(state):
+    state_init = copy.deepcopy(state)
+
+    stack_of_states = [(state_init, 1, [state_init])]
+    last_row = stack_of_states[:]
+    state, current_level, history_of_states = stack_of_states.pop()
+    maximum_allowed_depth = 1
+    visited_states = [state_init]
+
+    while not is_final(state):
+        to = 1 - state["boat"]["position"]
+
+        for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
+            for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
+                if validation(state, moved_missionaries, moved_cannibals, to) and current_level + 1 <= maximum_allowed_depth:
+                    new_state = transition(state, moved_missionaries, moved_cannibals, to)
+                    if new_state not in visited_states:
+                        stack_of_states.append((new_state, current_level + 1, history_of_states + [new_state]))
+                        visited_states.append(new_state)
+                        if current_level + 1 == maximum_allowed_depth:
+                            last_row.append((new_state, current_level + 1, history_of_states + [new_state]))
+
+        if len(stack_of_states) == 0:
+            maximum_allowed_depth += 1
+            stack_of_states = last_row[:]
+            last_row = []
+        state, current_level, history_of_states = stack_of_states.pop()
+
+    for state_from_path in history_of_states:
+        print(state_from_path)
+
 
 def bkt(state, visited_states, to):
     for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
@@ -107,6 +129,6 @@ def bkt_strategy(state):
     bkt(state, [state], 1)
 
 
-bkt_strategy(initialize(4, 10, 9))
-
-print(random_strategy(initialize(3, 5, 5)))
+# random_strategy(initialize(4, 10, 9))
+# iddfs_strategy(initialize(4, 10, 9))
+# bkt_strategy(initialize(4, 10, 9))
