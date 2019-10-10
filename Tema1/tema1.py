@@ -38,11 +38,13 @@ def transition(state, moved_missionaries, moved_cannibals, to):
 
 
 def validation(state, moved_missionaries, moved_cannibals, to):
-    return (state["number_of_missionaries"][0] > 0 and state["number_of_missionaries"][0] >= state["number_of_cannibals"][0] and
-            state["number_of_missionaries"][1] > 0 and state["number_of_missionaries"][1] >= state["number_of_cannibals"][1] and
+    return (state["number_of_missionaries"][0] + ((-1)** to) * moved_missionaries >= state["number_of_cannibals"][0] + ((-1)** to) * moved_cannibals and
+            state["number_of_missionaries"][1] + ((-1)** to) * moved_missionaries >= state["number_of_cannibals"][1] + ((-1)** to) * moved_cannibals and
             moved_missionaries >= 0 and moved_cannibals >= 0 and 0 < moved_cannibals + moved_missionaries <= state["boat"]["capacity"] and
             state["number_of_missionaries"][1 - to] - moved_missionaries >= 0 and state["number_of_cannibals"][1 - to] - moved_cannibals >= 0)
 
+
+def random_strategy(state):
     counter_init = 100
     state_init = state
 
@@ -79,8 +81,8 @@ def validation(state, moved_missionaries, moved_cannibals, to):
 #         to = 1 - to
 #         # Choose bkt moved_missionaries, moved_cannibals from possible transitions
 #         new_state = transition(state, moved_missionaries, moved_cannibals, to)
-#         if validation(new_state, moved_missionaries, moved_cannibals):
-#             state = new_state
+#         if validation(state, moved_missionaries, moved_cannibals):
+#             state = transition(state, moved_missionaries, moved_cannibals, to)
 #
 #     return state
 #
@@ -96,4 +98,17 @@ def validation(state, moved_missionaries, moved_cannibals, to):
 #
 #     return state
 
-print(random_strategy(initialize(3, 5, 5)))
+def bkt(state, k, visited_states):
+    for i in range(0, state["number_of_missionaries"][1 - to]):
+        for j in range(0, state["number_of_cannibals"][1 - to]):
+            if validation(state, i, j, to):
+                state = transition(state, i, j, to)
+                if len(visited_states) < k:
+                    visited_states.append(state)
+                else:
+                    visited_states[k] = state
+                if is_final(state):
+                    
+
+
+# print(initialize(3, 5, 5))
