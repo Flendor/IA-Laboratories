@@ -1,6 +1,7 @@
 import random
 import copy
 
+######################################### Functions for states #########################################
 
 def initialize(boat_capacity, number_of_missionaries, number_of_cannibals):
     return {
@@ -48,6 +49,11 @@ def validation(state, moved_missionaries, moved_cannibals, to):
             state["number_of_missionaries"][1 - to] - moved_missionaries >= 0 and state["number_of_cannibals"][1 - to] - moved_cannibals >= 0)
 
 
+######################################### Strategies #########################################
+
+
+#################### Random ####################
+
 def random_strategy(state):
     counter_init = 100
     state_init = copy.deepcopy(state)
@@ -75,7 +81,11 @@ def random_strategy(state):
 
     for visited_state in visited_states:
         print(visited_state)
+    
+    return len(visited_states)
 
+
+#################### iIDDFS ####################
 
 def iddfs_strategy(state):
     state_init = copy.deepcopy(state)
@@ -108,14 +118,18 @@ def iddfs_strategy(state):
     for state_from_path in history_of_states:
         print(state_from_path)
 
+    return len(history_of_states)
+
+
+#################### BKT ####################
 
 bkt_flag = False
 
-
 def bkt(state, visited_states, to):
     global bkt_flag
+    bkt_return = 0
     if bkt_flag:
-        return
+        return bkt_return
     for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
         for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
             if validation(state, moved_missionaries, moved_cannibals, to):
@@ -126,17 +140,22 @@ def bkt(state, visited_states, to):
                         for v in visited_states:
                             print(v)
                         bkt_flag = True
+                        return len(visited_states)
                     else:
-                        bkt(new_state, visited_states, 1 - to)
+                        bkt_return = bkt(new_state, visited_states, 1 - to)
                     if bkt_flag:
-                        return
-                    visited_states.pop()
+                        return bkt_return
+                    visited_states.pop()  
 
 
 def bkt_strategy(state):
-    bkt(state, [state], 1)
+    return bkt(state, [state], 1)
 
 
-# random_strategy(initialize(4, 10, 9))
-# iddfs_strategy(initialize(4, 10, 9))
-# bkt_strategy(initialize(4, 10, 9))
+#################### A* ####################
+
+
+
+print(random_strategy(initialize(4, 10, 9)))
+print(iddfs_strategy(initialize(4, 10, 9)))
+print(bkt_strategy(initialize(4, 10, 9)))
