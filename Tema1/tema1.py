@@ -1,6 +1,7 @@
 import random
 import copy
 
+
 ######################################### Functions for states #########################################
 
 def initialize(boat_capacity, number_of_missionaries, number_of_cannibals):
@@ -42,11 +43,15 @@ def transition(state, moved_missionaries, moved_cannibals, to):
 
 def validation(state, moved_missionaries, moved_cannibals, to):
     return ((state["number_of_missionaries"][0] + ((-1) ** to) * moved_missionaries == 0 or
-            state["number_of_missionaries"][0] + ((-1) ** to) * moved_missionaries >= state["number_of_cannibals"][0] + ((-1) ** to) * moved_cannibals) and
+             state["number_of_missionaries"][0] + ((-1) ** to) * moved_missionaries >= state["number_of_cannibals"][
+                 0] + ((-1) ** to) * moved_cannibals) and
             (state["number_of_missionaries"][1] + ((-1) ** (1 - to)) * moved_missionaries == 0 or
-            state["number_of_missionaries"][1] + ((-1) ** (1 - to)) * moved_missionaries >= state["number_of_cannibals"][1] + ((-1) ** (1 - to)) * moved_cannibals) and
-            moved_missionaries >= 0 and moved_cannibals >= 0 and 0 < moved_cannibals + moved_missionaries <= state["boat"]["capacity"] and
-            state["number_of_missionaries"][1 - to] - moved_missionaries >= 0 and state["number_of_cannibals"][1 - to] - moved_cannibals >= 0)
+             state["number_of_missionaries"][1] + ((-1) ** (1 - to)) * moved_missionaries >=
+             state["number_of_cannibals"][1] + ((-1) ** (1 - to)) * moved_cannibals) and
+            moved_missionaries >= 0 and moved_cannibals >= 0 and 0 < moved_cannibals + moved_missionaries <=
+            state["boat"]["capacity"] and
+            state["number_of_missionaries"][1 - to] - moved_missionaries >= 0 and state["number_of_cannibals"][
+                1 - to] - moved_cannibals >= 0)
 
 
 ######################################### Strategies #########################################
@@ -81,7 +86,7 @@ def random_strategy(state):
 
     for visited_state in visited_states:
         print(visited_state)
-    
+
     return len(visited_states)
 
 
@@ -101,7 +106,8 @@ def iddfs_strategy(state):
 
         for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
             for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
-                if validation(state, moved_missionaries, moved_cannibals, to) and current_level + 1 <= maximum_allowed_depth:
+                if validation(state, moved_missionaries, moved_cannibals,
+                              to) and current_level + 1 <= maximum_allowed_depth:
                     new_state = transition(state, moved_missionaries, moved_cannibals, to)
                     if new_state not in visited_states:
                         stack_of_states.append((new_state, current_level + 1, history_of_states + [new_state]))
@@ -125,6 +131,7 @@ def iddfs_strategy(state):
 
 bkt_flag = False
 
+
 def bkt(state, visited_states, to):
     global bkt_flag
     bkt_return = 0
@@ -145,7 +152,7 @@ def bkt(state, visited_states, to):
                         bkt_return = bkt(new_state, visited_states, 1 - to)
                     if bkt_flag:
                         return bkt_return
-                    visited_states.pop()  
+                    visited_states.pop()
 
 
 def bkt_strategy(state):
@@ -154,8 +161,50 @@ def bkt_strategy(state):
 
 #################### A* ####################
 
+def number_of_people_on_the_first_shore(state):
+    return state['number_of_missionaries'][0] + state['number_of_cannibals'][0] + state['boat']['position']
 
 
-print(random_strategy(initialize(4, 10, 9)))
-print(iddfs_strategy(initialize(4, 10, 9)))
-print(bkt_strategy(initialize(4, 10, 9)))
+def heuristic_distance(state):
+    return number_of_people_on_the_first_shore(state)
+
+
+def A_star(initial_state):
+    distance = {str(initial_state): 0}
+    parent = {str(initial_state): None}
+    queue = [initial_state]
+
+    while len(queue) > 0:
+        state = queue.pop()
+        to = 1 - state["boat"]["position"]
+
+        if is_final(state):
+            path = [state]
+            while parent[str(state)] is not None:
+                state = parent[str(state)]
+                path += [state]
+
+            for state in reversed(path):
+                print(state)
+            return len(path)
+
+        for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
+            for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
+                if validation(state, moved_missionaries, moved_cannibals, to):
+                    new_state = transition(state, moved_missionaries, moved_cannibals, to)
+                    if str(new_state) in distance.keys() and distance[str(state)] + 1 < distance[str(new_state)]:
+                        distance[str(new_state)] = distance[str(state)] + 1
+                        parent[str(new_state)] = state
+                        queue.append(new_state)
+                    elif str(new_state) not in distance.keys():
+                        distance[str(new_state)] = distance[str(state)] + 1
+                        parent[str(new_state)] = state
+                        queue.append(new_state)
+
+        queue.sort(reverse=True,
+                   key=lambda current_state: distance[str(current_state)] + heuristic_distance(current_state))
+
+# print(random_strategy(initialize(4, 10, 9)))
+# print(iddfs_strategy(initialize(5, 15, 15)))
+# print(bkt_strategy(initialize(4, 10, 9)))
+# print(A_star(initialize(5, 15, 15)))
