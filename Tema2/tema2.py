@@ -163,6 +163,53 @@ def bkt_strategy(state):
     return bkt(state, [state], 1)
 
 
+#################### A* ####################
+
+def number_of_people_on_the_first_shore(state):
+    return state['number_of_missionaries'][0] + state['number_of_cannibals'][0] + state['boat']['position']
+
+
+def heuristic_distance(state):
+    return number_of_people_on_the_first_shore(state)
+
+
+def a_star(initial_state):
+    distance = {str(initial_state): 0}
+    parent = {str(initial_state): None}
+    queue = [initial_state]
+
+    while len(queue) > 0:
+        state = queue.pop()
+        to = 1 - state["boat"]["position"]
+
+        if is_final(state):
+            path = [state]
+            while parent[str(state)] is not None:
+                state = parent[str(state)]
+                path += [state]
+
+            for state in reversed(path):
+                print(state)
+            return len(path) - 1
+
+        for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
+            for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
+                if validation(state, moved_missionaries, moved_cannibals, to):
+                    new_state = transition(state, moved_missionaries, moved_cannibals, to)
+                    if str(new_state) in distance.keys() and distance[str(state)] + 1 < distance[str(new_state)]:
+                        distance[str(new_state)] = distance[str(state)] + 1
+                        parent[str(new_state)] = state
+                        queue.append(new_state)
+                    elif str(new_state) not in distance.keys():
+                        distance[str(new_state)] = distance[str(state)] + 1
+                        parent[str(new_state)] = state
+                        queue.append(new_state)
+
+        queue.sort(reverse=True,
+                   key=lambda current_state: distance[str(current_state)] + heuristic_distance(current_state))
+
+
 print(random_strategy(initialize(3, 5, 5)))
 print(iddfs_strategy(initialize(3, 5, 5)))
 print(bkt_strategy(initialize(3, 5, 5)))
+print(a_star(initialize(3, 5, 5)))
