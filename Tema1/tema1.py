@@ -109,7 +109,13 @@ def iddfs_strategy(state):
         print(state_from_path)
 
 
+bkt_flag = False
+
+
 def bkt(state, visited_states, to):
+    global bkt_flag
+    if bkt_flag:
+        return
     for moved_missionaries in range(state["number_of_missionaries"][1 - to], -1, -1):
         for moved_cannibals in range(state["number_of_cannibals"][1 - to], -1, -1):
             if validation(state, moved_missionaries, moved_cannibals, to):
@@ -119,9 +125,11 @@ def bkt(state, visited_states, to):
                     if is_final(new_state):
                         for v in visited_states:
                             print(v)
-                        exit()
+                        bkt_flag = True
                     else:
                         bkt(new_state, visited_states, 1 - to)
+                    if bkt_flag:
+                        return
                     visited_states.pop()
 
 
