@@ -163,6 +163,6 @@ def bkt_strategy(state):
     return bkt(state, [state], 1)
 
 
-# print(random_strategy(initialize(4, 10, 10)))
-print(iddfs_strategy(initialize(4, 10, 10)))
-print(bkt_strategy(initialize(4, 10, 10)))
+print(random_strategy(initialize(3, 5, 5)))
+print(iddfs_strategy(initialize(3, 5, 5)))
+print(bkt_strategy(initialize(3, 5, 5)))
