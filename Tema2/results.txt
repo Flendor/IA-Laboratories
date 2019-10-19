@@ -1,74 +1,74 @@
 After running the 4 algorithms with 10 different sets of inputs, it seems that:
 
-For the instance: 4 boat capacity, 12 missionaries and 12 cannibals, we have:
-A*: solution of 21 states and a duration of 0.0079
-IDDFS: solution of 21 states and a duration of 0.0136
-BKT: solution of 29 states and a duration of 0.003
-Random: solution of 21 states and a duration of 0.1265
+For the instance: 3 boat capacity, 14 missionaries and 10 cannibals, we have:
+A*: solution of 23 states and a duration of 0.0123
+IDDFS: solution of 23 states and a duration of 0.0418
+BKT: solution of 63 states and a duration of 0.013
+Random: solution of 47 states and a duration of 0.0267
 
-For the instance: 3 boat capacity, 13 missionaries and 7 cannibals, we have:
-A*: solution of 19 states and a duration of 0.0109
-IDDFS: solution of 19 states and a duration of 0.035
-BKT: solution of 53 states and a duration of 0.0031
-Random: solution of 35 states and a duration of 0.1694
-
-For the instance: 3 boat capacity, 11 missionaries and 5 cannibals, we have:
-A*: solution of 15 states and a duration of 0.0093
-IDDFS: solution of 15 states and a duration of 0.0235
-BKT: solution of 41 states and a duration of 0.0104
-Random: solution of 33 states and a duration of 0.1213
+For the instance: 3 boat capacity, 12 missionaries and 8 cannibals, we have:
+A*: solution of 19 states and a duration of 0.0137
+IDDFS: solution of 19 states and a duration of 0.0283
+BKT: solution of 51 states and a duration of 0.0084
+Random: solution of 37 states and a duration of 0.1062
 
 For the instance: 3 boat capacity, 9 missionaries and 4 cannibals, we have:
-A*: solution of 11 states and a duration of 0.0056
-IDDFS: solution of 11 states and a duration of 0.0102
-BKT: solution of 31 states and a duration of 0.0031
-Random: solution of 29 states and a duration of 0.0346
+A*: solution of 11 states and a duration of 0.0054
+IDDFS: solution of 11 states and a duration of 0.0097
+BKT: solution of 31 states and a duration of 0.003
+Random: solution of 29 states and a duration of 0.0456
 
-For the instance: 2 boat capacity, 5 missionaries and 4 cannibals, we have:
-A*: solution of 15 states and a duration of 0.0027
-IDDFS: solution of 15 states and a duration of 0.0027
-BKT: solution of 17 states and a duration of 0.0007
-Random: solution of 15 states and a duration of 0.1274
+For the instance: 2 boat capacity, 9 missionaries and 8 cannibals, we have:
+A*: solution of 31 states and a duration of 0.0059
+IDDFS: solution of 31 states and a duration of 0.0075
+BKT: solution of 33 states and a duration of 0.0024
+Random: solution of 33 states and a duration of 0.3229
 
-For the instance: 4 boat capacity, 12 missionaries and 5 cannibals, we have:
-A*: solution of 11 states and a duration of 0.0082
-IDDFS: solution of 11 states and a duration of 0.0272
-BKT: solution of 51 states and a duration of 0.0157
-Random: solution of 21 states and a duration of 0.0537
+For the instance: 2 boat capacity, 12 missionaries and 7 cannibals, we have:
+A*: solution of 35 states and a duration of 0.0178
+IDDFS: solution of 35 states and a duration of 0.0224
+BKT: solution of 53 states and a duration of 0.005
+Random: solution of 53 states and a duration of 1.8591
 
-For the instance: 2 boat capacity, 11 missionaries and 6 cannibals, we have:
-A*: solution of 31 states and a duration of 0.0153
-IDDFS: solution of 31 states and a duration of 0.0185
-BKT: solution of 47 states and a duration of 0.0075
-Random: solution of 47 states and a duration of 2.3091
+For the instance: 3 boat capacity, 11 missionaries and 9 cannibals, we have:
+A*: solution of 19 states and a duration of 0.0053
+IDDFS: solution of 19 states and a duration of 0.0172
+BKT: solution of 53 states and a duration of 0.0037
+Random: solution of 33 states and a duration of 0.2568
 
-For the instance: 4 boat capacity, 14 missionaries and 7 cannibals, we have:
-A*: solution of 13 states and a duration of 0.0111
-IDDFS: solution of 13 states and a duration of 0.0423
-BKT: solution of 63 states and a duration of 0.0247
-Random: solution of 47 states and a duration of 0.0037
+For the instance: 2 boat capacity, 11 missionaries and 5 cannibals, we have:
+A*: solution of 29 states and a duration of 0.0156
+IDDFS: solution of 29 states and a duration of 0.0166
+BKT: solution of 45 states and a duration of 0.0077
+Random: solution of 59 states and a duration of 3.8512
 
-For the instance: 4 boat capacity, 6 missionaries and 4 cannibals, we have:
-A*: solution of 5 states and a duration of 0.0017
-IDDFS: solution of 5 states and a duration of 0.0032
-BKT: solution of 23 states and a duration of 0.0009
-Random: solution of 25 states and a duration of 0.0974
+For the instance: 3 boat capacity, 3 missionaries and 3 cannibals, we have:
+A*: solution of 5 states and a duration of 0.0008
+IDDFS: solution of 5 states and a duration of 0.0009
+BKT: solution of 11 states and a duration of 0.0004
+Random: solution of 5 states and a duration of 0.0002
 
-For the instance: 3 boat capacity, 11 missionaries and 7 cannibals, we have:
-A*: solution of 17 states and a duration of 0.0072
-IDDFS: solution of 17 states and a duration of 0.0211
-BKT: solution of 45 states and a duration of 0.0055
-Random: solution of 43 states and a duration of 0.0204
+For the instance: 4 boat capacity, 8 missionaries and 4 cannibals, we have:
+A*: solution of 7 states and a duration of 0.0037
+IDDFS: solution of 7 states and a duration of 0.0086
+BKT: solution of 31 states and a duration of 0.0041
+Random: solution of 15 states and a duration of 0.0009
+
+For the instance: 2 boat capacity, 12 missionaries and 10 cannibals, we have:
+A*: solution of 41 states and a duration of 0.0144
+IDDFS: solution of 41 states and a duration of 0.0244
+BKT: solution of 43 states and a duration of 0.0084
+Random: solution of 47 states and a duration of 143.7682
 
 
-Medium execution time for A*: 0.00799
-Medium solution length for A*: 15.8
+Medium execution time for A*: 0.00949
+Medium solution length for A*: 22.0
 
-Medium execution time for IDDFS: 0.01973
-Medium solution length for IDDFS: 15.8
+Medium execution time for IDDFS: 0.01774
+Medium solution length for IDDFS: 22.0
 
-Medium execution time for BKT: 0.00746
-Medium solution length for BKT: 40.0
+Medium execution time for BKT: 0.005609999999999999
+Medium solution length for BKT: 41.4
 
-Medium execution time for Random: 0.30635
-Medium solution length for Random: 31.6
+Medium execution time for Random: 15.023780000000002
+Medium solution length for Random: 35.8
