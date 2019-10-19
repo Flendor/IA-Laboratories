@@ -1,5 +1,7 @@
 import random
 import copy
+from timeit import default_timer as timer
+import sys
 
 
 ######################################### Functions for states #########################################
@@ -60,7 +62,7 @@ def validation(state, moved_missionaries, moved_cannibals, to):
 #################### Random ####################
 
 def random_strategy(state):
-    counter_init = 100
+    counter_init = 1000
     state_init = copy.deepcopy(state)
 
     counter = counter_init
@@ -136,7 +138,7 @@ def iddfs_strategy(state):
 bkt_flag = False
 
 
-def bkt(state, visited_states, to):
+def bkt(state, visited_states, all_bkt_states, to):
     global bkt_flag
     bkt_return = 0
     if bkt_flag:
@@ -145,22 +147,23 @@ def bkt(state, visited_states, to):
         for moved_cannibals in range(state["number_of_cannibals"][1 - to] + 1):
             if validation(state, moved_missionaries, moved_cannibals, to):
                 new_state = transition(state, moved_missionaries, moved_cannibals, to)
-                if new_state not in visited_states:
+                if new_state not in all_bkt_states:
                     visited_states.append(new_state)
+                    all_bkt_states.append(new_state)
                     if is_final(new_state):
                         for v in visited_states:
                             print(v)
                         bkt_flag = True
                         return len(visited_states) - 1
                     else:
-                        bkt_return = bkt(new_state, visited_states, 1 - to)
+                        bkt_return = bkt(new_state, visited_states, all_bkt_states, 1 - to)
                     if bkt_flag:
                         return bkt_return
                     visited_states.pop()
 
 
 def bkt_strategy(state):
-    return bkt(state, [state], 1)
+    return bkt(state, [state], [state], 1)
 
 
 #################### A* ####################
@@ -209,7 +212,95 @@ def a_star(initial_state):
                    key=lambda current_state: distance[str(current_state)] + heuristic_distance(current_state))
 
 
-print(random_strategy(initialize(3, 5, 5)))
-print(iddfs_strategy(initialize(3, 5, 5)))
-print(bkt_strategy(initialize(3, 5, 5)))
-print(a_star(initialize(3, 5, 5)))
+def generate_one_instance():
+    return random.randrange(2, 5), random.randrange(3, 15), random.randrange(3, 15)
+
+
+def generate_all_instances():
+    instances = []
+    for i in range(0, 10):
+        current_instance = generate_one_instance()
+        while current_instance in instances or \
+                not a_star(initialize(current_instance[0], current_instance[1], current_instance[2])):
+            current_instance = generate_one_instance()
+        instances.append(current_instance)
+    return instances
+
+
+def run_one_time(alg, file, instance, stats):
+    if alg == "A*":
+        alg_start = timer()
+        alg_length = a_star(initialize(instance[0], instance[1], instance[2]))
+        alg_end = timer()
+    elif alg == "IDDFS":
+        alg_start = timer()
+        alg_length = iddfs_strategy(initialize(instance[0], instance[1], instance[2]))
+        alg_end = timer()
+    elif alg == "BKT":
+        alg_start = timer()
+        alg_length = bkt_strategy(initialize(instance[0], instance[1], instance[2]))
+        alg_end = timer()
+    else:
+        alg_start = timer()
+        alg_length = random_strategy(initialize(instance[0], instance[1], instance[2]))
+        alg_end = timer()
+    stats[0].append(alg_length)
+    stats[1].append(round(alg_end - alg_start, 4))
+    file.write(alg + ": solution of " + str(stats[0][len(stats[0]) - 1]) +
+               " states and a duration of " + str(stats[1][len(stats[1]) - 1]) +
+               '\n')
+
+
+def run_instances(instances):
+    global bkt_flag
+    a_star_stats = ([], [])
+    iddfs_stats = ([], [])
+    bkt_stats = ([], [])
+    random_stats = ([], [])
+    file = open("results.txt", "w")
+    file.write("After running the 4 algorithms with 10 different sets of inputs, it seems that:\n\n")
+    file.close()
+    file = open("results.txt", "a")
+    for instance in instances:
+        file.write("For the instance: ")
+        file.write(str(instance[0]) + " boat capacity, " +
+                   str(instance[1]) + " missionaries and "
+                   + str(instance[2]) + " cannibals, we have:\n")
+        print("a_star")
+        run_one_time("A*", file, instance, a_star_stats)
+        print("iddfs")
+        run_one_time("IDDFS", file, instance, iddfs_stats)
+        print("bkt")
+        run_one_time("BKT", file, instance, bkt_stats)
+        bkt_flag = False
+        print("random")
+        run_one_time("Random", file, instance, random_stats)
+        file.write('\n')
+
+    time_a_star = sum(a_star_stats[1]) / 10
+    time_iddfs = sum(iddfs_stats[1]) / 10
+    time_bkt = sum(bkt_stats[1]) / 10
+    time_random = sum(random_stats[1]) / 10
+    length_a_star = sum(a_star_stats[0]) / 10
+    length_iddfs = sum(iddfs_stats[0]) / 10
+    length_bkt = sum(bkt_stats[0]) / 10
+    length_random = sum(random_stats[0]) / 10
+
+    file.write("\nMedium execution time for A*: " + str(time_a_star) + '\n')
+    file.write("Medium solution length for A*: " + str(length_a_star) + '\n')
+    file.write("\nMedium execution time for IDDFS: " + str(time_iddfs) + '\n')
+    file.write("Medium solution length for IDDFS: " + str(length_iddfs) + '\n')
+    file.write("\nMedium execution time for BKT: " + str(time_bkt) + '\n')
+    file.write("Medium solution length for BKT: " + str(length_bkt) + '\n')
+    file.write("\nMedium execution time for Random: " + str(time_random) + '\n')
+    file.write("Medium solution length for Random: " + str(length_random) + '\n')
+
+    file.close()
+
+
+run_instances(generate_all_instances())
+
+
+#print(iddfs_strategy(initialize(4, 15, 15)))
+#print(bkt_strategy(initialize(4, 15, 15)))
+#print(a_star(initialize(4, 9, 5)))
