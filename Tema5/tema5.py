@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class Error(Exception):
     """Base class for other exceptions"""
     pass
@@ -27,13 +30,13 @@ def read_from_file():
 
 
 def print_matrix(matrix):
+    if matrix is False:
+        print("There is no solution!")
+        return
     for line in matrix:
         for col in line:
             print(col[0], end=' ')
         print()
-
-
-print_matrix(read_from_file())
 
 
 def get_squares(i, j):
@@ -54,14 +57,56 @@ def get_squares(i, j):
 
 
 def forward_checking(i, j, matrix):
-    pass
+    val = matrix[i][j][0]
+    for k in range(0, 9):
+        if matrix[i][k][0] == 0 and val in matrix[i][k]:
+            matrix[i][k].remove(val)
+            if len(matrix[i][k][1:]) == 0:
+                return False
+    for k in range(0, 9):
+        if matrix[k][j][0] == 0 and val in matrix[k][j]:
+            matrix[k][j].remove(val)
+            if len(matrix[k][j][1:]) == 0:
+                return False
+    square_pairs = get_squares(i, j)
+    for square_i, square_j in square_pairs:
+        if matrix[square_i][square_j][0] == 0 and val in matrix[square_i][square_j]:
+            matrix[square_i][square_j].remove(val)
+            if len(matrix[square_i][square_j][1:]) == 0:
+                return False
+    matrix[i][j] = [val]
+    return matrix
 
 
-def bkt(matrix):
-    for i in range(0, 9):
-        for j in range(0, 9):
-            for possible_number in matrix[i][j][1:]:
-                pass
+def final_state(matrix):
+    for line in matrix:
+        for col in line:
+            if col[0] == 0:
+                return False
+    return True
 
 
-print(get_squares(3, 4))
+def bkt(matrix, i, j):
+    while matrix[i][j][0] != 0:
+        i += ((j + 1) // 9)
+        j = (j + 1) % 9
+
+    for possible_number in matrix[i][j][1:]:
+        matrix_copy = deepcopy(matrix)
+        matrix_copy[i][j][0] = possible_number
+        matrix_copy = forward_checking(i, j, matrix_copy)
+        if matrix_copy is not False:
+            if final_state(matrix_copy):
+                print_matrix(matrix_copy)
+                exit()
+            bkt(matrix_copy, i + ((j + 1) // 9), (j + 1) % 9)
+
+
+read_matrix = read_from_file()
+for i in range(0, 9):
+    for j in range(0, 9):
+        if read_matrix[i][j][0] != 0:
+            read_matrix = forward_checking(i, j, read_matrix)
+            if read_matrix is False:
+                raise WrongInputError
+bkt(read_matrix, 0, 0)

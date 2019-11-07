@@ -7,9 +7,9 @@ while winner is None:
     state = game.HumanStrategy.play(state)
     game.Screen.draw(state.board)
     print('The bot is analyzing!')
-    #state, score = game.BotStrategy.min_max(state)
-    state, score = game.BotStrategy.alpha_beta(state)
-    print(f'The bot expects to have a score of {score} in 2 turns!')
+    # state, score = game.BotStrategy.min_max(state)
+    # state, score = game.BotStrategy.alpha_beta(state)
+    # print(f'The bot expects to have a score of {score} in 2 turns!')
     winner = state.get_winner()
 game.Screen.draw(state.board)
 if winner == game.PlayerTypes.HUMAN:
