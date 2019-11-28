@@ -167,13 +167,13 @@ def walk(matrix, n, walls, start, stop):
 
 # setup
 start = (0, 0)
-stop = (5, 5)
-n = 6
+stop = (6, 6)
+n = 7
 matrix = init_matrix(n)
 matrix = init_goal(matrix, stop)
 
-walls = {(1, 0), (3, 0), (4, 1), (5, 2), (3, 3),
-         (4, 4), (1, 2), (1, 3), (1, 4)}
+walls = {(1, 0), (3, 1), (4, 1), (5, 1), (1, 2), (2, 2), (4, 2),
+         (3, 3), (4, 3), (4, 4), (2, 5), (6, 5), (0, 6), (4, 6)}
 
 # Q-Learning
 q_learning(matrix=matrix, n=n, start=start, walls=walls, stop=stop, iterations=1000)
