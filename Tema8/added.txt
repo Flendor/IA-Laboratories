@@ -1,0 +1,5 @@
+Software release life cycle
+Fragment
+Activity
+View
+Model
