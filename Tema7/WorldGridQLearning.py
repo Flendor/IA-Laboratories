@@ -96,7 +96,7 @@ def get_next_position(current_position, chosen_action, n, walls):
 
 
 def get_max_q(matrix, current_position):
-    max_val = 0
+    max_val = -1
     max_action = ""
     for action in get_actions():
         if matrix[current_position[0]][current_position[1]][action] > max_val:
@@ -105,30 +105,20 @@ def get_max_q(matrix, current_position):
     return max_val, max_action
 
 
-def get_min_q(matrix, current_position):
-    min_val = 1
-    min_action = ""
-    for action in get_actions():
-        if matrix[current_position[0]][current_position[1]][action] < min_val:
-            min_val = matrix[current_position[0]][current_position[1]][action]
-            min_action = action
-    return min_val, min_action
-
-
 def q_learning(matrix, n, walls, start, stop, iterations=10, alpha=.5, gamma=1, epsilon=.7):
     # probabilities of taking the best action (1st) vs the other ones (2nd, 3rd, 4th)
-    probs = [1 - epsilon, epsilon / 3, epsilon / 3, epsilon / 3]
+    probs = [epsilon, (1 - epsilon) / 3, (1 - epsilon) / 3, (1 - epsilon) / 3]
 
     for iteration in range(iterations):
         current_position = start
         while current_position != stop:
             # search the best action to take
-            min_current_val, min_current_action = get_min_q(matrix, current_position)
+            max_current_val, max_current_action = get_max_q(matrix, current_position)
 
             # take that action with a probability of 1-epsilon
             actions = get_actions()
-            actions.remove(min_current_action)
-            actions = [min_current_action] + actions
+            actions.remove(max_current_action)
+            actions = [max_current_action] + actions
             chosen_action = np.random.choice(actions, p=probs)
 
             # get the next position based on the chosen action
