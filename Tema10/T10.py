@@ -1,7 +1,10 @@
 import re
 from gensim.models import Word2Vec
 import numpy as np
-from sklearn import tree
+# from sklearn import tree
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 
 
 def parse_data():
@@ -49,18 +52,51 @@ point_a(must_create_model=False)
 def get_sets():
     data = parse_data()
     np.random.shuffle(data)
-    training_set = data[:int(0.8*len(data))]
-    test_set = data[int(0.8*len(data)):]
+    training_set = data[:int(0.8 * len(data))]
+    test_set = data[int(0.8 * len(data)):]
     return training_set, test_set
 
 
 def train(training_set):
-    clf = tree.DecisionTreeClassifier()
+    # separate inputs and labels from the training set
     sentences = [training_set[i][0] for i in range(len(training_set))]
     labels = [training_set[i][1] for i in range(len(training_set))]
-    clf = clf.fit(sentences, labels)
-    tree.plot_tree(clf)
-    return clf
+
+    # transform in embedded words (vectors)
+    count_vect = CountVectorizer()
+    sentences_counts = count_vect.fit_transform(sentences)
+
+    # fit the Word2Vec of this library
+    tfidf_transformer = TfidfTransformer()
+    sentences_tf = tfidf_transformer.fit_transform(sentences_counts)
+
+    # fit the ML classifier (naive Bayes)
+    return MultinomialNB().fit(sentences_tf, labels), count_vect, tfidf_transformer
 
 
-print(train(get_sets()[0]))
+def test(test_set, classifier, count_vect, tfidf_transformer):
+    # separate inputs and labels from the training set
+    sentences = [test_set[i][0] for i in range(len(test_set))]
+    labels = [test_set[i][1] for i in range(len(test_set))]
+
+    # transform in embedded words (vectors)
+    sentences_counts = count_vect.transform(sentences)
+
+    # fit the Word2Vec of this library
+    # tfidf_transformer = TfidfTransformer()
+    sentences_tfid = tfidf_transformer.transform(sentences_counts)
+
+    predicted = classifier.predict(sentences_tfid)
+
+    misclassified = 0
+    for i in range(len(predicted)):
+        if predicted[i] != labels[i]:
+            misclassified += 1
+
+    print(f"Acc: {(1 - misclassified / len(predicted)) * 100}%.")
+
+
+sets = get_sets()
+classifier, count_vect, tfidf_transformer = train(sets[0])
+print()
+test(sets[1], classifier, count_vect, tfidf_transformer)
