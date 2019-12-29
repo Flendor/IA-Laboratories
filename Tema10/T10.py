@@ -1,7 +1,6 @@
 import re
 from gensim.models import Word2Vec
 import numpy as np
-# from sklearn import tree
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -83,7 +82,6 @@ def test(test_set, classifier, count_vect, tfidf_transformer):
     sentences_counts = count_vect.transform(sentences)
 
     # fit the Word2Vec of this library
-    # tfidf_transformer = TfidfTransformer()
     sentences_tfid = tfidf_transformer.transform(sentences_counts)
 
     predicted = classifier.predict(sentences_tfid)
